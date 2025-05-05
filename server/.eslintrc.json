@@ -1,0 +1,18 @@
+{
+  "env": {
+    "node": true, // Habilita variáveis de ambiente e globais do Node.js
+    "es2021": true // Habilita features do ECMAScript 2021
+  },
+  "extends": [
+    "eslint:recommended", // Usa o conjunto de regras recomendadas do ESLint
+    "prettier" // *** IMPORTANTE: Usa a configuração do prettier para desativar regras conflitantes ***
+  ],
+  "parserOptions": {
+    "ecmaVersion": 12, // Define a versão do ECMAScript
+    "sourceType": "module" // Permite usar módulos (import/export)
+  },
+  "rules": {
+    // Adicione regras customizadas aqui, se desejar.
+    // Exemplo: "no-unused-vars": "warn"
+  }
+}
