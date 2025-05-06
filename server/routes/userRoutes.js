@@ -1,75 +1,146 @@
 const express = require('express');
-const router = express.Router(); // Cria um roteador Express
-const asyncHandler = require('express-async-handler'); // Middleware para lidar com async errors
-const User = require('../models/User'); // Importa o modelo User
-const generateToken = require('../utils/generateToken'); // Importa o helper de token
+const router = express.Router();
+const asyncHandler = require('express-async-handler');
+const User = require('../models/User');
+const generateToken = require('../utils/generateToken');
 
-// Iremos instalar express-async-handler em breve
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Autenticação de usuários
+ */
 
-// @desc    Registrar um novo usuário
-// @route   POST /api/auth/register
-// @access  Public
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Registra um novo usuário
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: Email único do usuário
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 minLength: 6
+ *                 description: Senha do usuário (mínimo 6 caracteres)
+ *     responses:
+ *       '201':
+ *         description: Usuário registrado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: ID do usuário criado
+ *                 email:
+ *                   type: string
+ *                   format: email
+ *                   description: Email do usuário
+ *                 token:
+ *                   type: string
+ *                   description: Token JWT para autenticação
+ *       '400':
+ *         description: Erro de validação (email já existe, dados inválidos)
+ */
 router.post(
   '/register',
   asyncHandler(async (req, res) => {
-    const { email, password } = req.body; // Extrai email e senha do corpo da requisição
+    const { email, password } = req.body;
 
-    // Verifica se o usuário já existe pelo email
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-      // Se existir, retorna um erro 400 (Bad Request)
       res.status(400);
       throw new Error('Usuário com este email já existe');
     }
 
-    // Cria o novo usuário usando o modelo User
-    // O middleware 'pre' no modelo fará o hash da senha automaticamente antes de salvar
-    const user = await User.create({
-      email,
-      password,
-    });
+    const user = await User.create({ email, password });
 
-    // Se o usuário foi criado com sucesso
     if (user) {
-      res.status(201).json({ // Status 201: Created
+      res.status(201).json({
         _id: user._id,
         email: user.email,
-        token: generateToken(user._id), // Gera e inclui o JWT na resposta
+        token: generateToken(user._id),
       });
     } else {
-      // Se houve algum problema na criação (embora o create lance erro se falhar)
       res.status(400);
       throw new Error('Dados do usuário inválidos');
     }
   })
 );
 
-// @desc    Autenticar usuário e obter token
-// @route   POST /api/auth/login
-// @access  Public
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Autentica um usuário e retorna um token JWT
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *     responses:
+ *       '200':
+ *         description: Login bem-sucedido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *       '401':
+ *         description: Não autorizado (email ou senha inválidos)
+ */
 router.post(
   '/login',
   asyncHandler(async (req, res) => {
-    const { email, password } = req.body; // Extrai email e senha
+    const { email, password } = req.body;
 
-    // Encontra o usuário pelo email
     const user = await User.findOne({ email });
 
-    // Verifica se o usuário existe e se a senha está correta
-    // Utilizamos o método matchPassword que adicionamos no modelo User
     if (user && (await user.matchPassword(password))) {
-      res.json({ // Retorna os dados do usuário e o token
+      res.json({
         _id: user._id,
         email: user.email,
-        token: generateToken(user._id), // Gera e inclui o JWT na resposta
+        token: generateToken(user._id),
       });
     } else {
-      // Se usuário não encontrado ou senha incorreta
-      res.status(401); // Status 401: Unauthorized
+      res.status(401);
       throw new Error('Email ou senha inválidos');
     }
   })
 );
 
-module.exports = router; // Exporta o roteador
+module.exports = router;
