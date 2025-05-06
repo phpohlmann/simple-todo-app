@@ -140,3 +140,36 @@ A documentação interativa da API está disponível enquanto o servidor backend
 Você pode explorar os endpoints, ver os schemas e até mesmo testar as rotas (lembre-se de usar o botão "Authorize" e fornecer um token JWT obtido via login para testar as rotas protegidas).
 
 ## 📂 Estrutura de Pastas
+
+simple-todo-app/
+├── client/ # Código do Frontend (React/Vite/Tailwind)
+│ ├── public/
+│ ├── src/
+│ │ ├── assets/
+│ │ ├── components/ # Componentes React reutilizáveis
+│ │ ├── context/ # React Context API (ex: AuthContext)
+│ │ ├── pages/ # Componentes de Página (Login, Register, Home)
+│ │ ├── App.jsx
+│ │ ├── index.css
+│ │ └── main.jsx
+│ ├── .gitignore
+│ ├── index.html
+│ ├── package.json
+│ ├── postcss.config.js
+│ └── tailwind.config.js
+│
+├── server/ # Código do Backend (Node.js/Express/MongoDB)
+│ ├── config/ # Configuração (ex: conexão DB)
+│ ├── controllers/ # (Opcional: Poderíamos refatorar para ter controllers)
+│ ├── middleware/ # Middlewares (auth, errors)
+│ ├── models/ # Modelos Mongoose (User, Task)
+│ ├── routes/ # Definições de Rotas Express
+│ ├── utils/ # Funções utilitárias (ex: generateToken)
+│ ├── .env # (Não versionado) Variáveis de ambiente
+│ ├── .eslintrc.json
+│ ├── .prettierrc.json
+│ ├── package.json
+│ └── server.js # Ponto de entrada do servidor
+│
+├── .gitignore # Arquivo gitignore global
+└── README.md # Este arquivo
