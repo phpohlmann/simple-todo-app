@@ -2,12 +2,12 @@ import "./index.css";
 import { Routes, Route } from "react-router-dom";
 
 // Páginas
-import LoginPage from "./pages/LoginPage.jsx"; // Verifique a extensão .jsx
-import RegisterPage from "./pages/RegisterPage.jsx"; // Verifique a extensão .jsx
-import HomePage from "./pages/HomePage.jsx"; // Verifique a extensão .jsx
+import LoginPage from "./pages/LoginPage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx";
+import HomePage from "./pages/HomePage.jsx";
 
 // Componente de Rota Protegida
-import ProtectedRoute from "./components/ProtectedRoute.jsx"; // Importa o ProtectedRoute
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function App() {
   return (
@@ -17,13 +17,12 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* Rotas Privadas */}
-        {/* Usamos uma rota pai com o ProtectedRoute como 'element' */}
+        {/* Rotas Privadas - Envolvidas por ProtectedRoute */}
+        {/* ProtectedRoute agora renderiza o layout (Navbar + Outlet) */}
         <Route element={<ProtectedRoute />}>
-          {/* Rotas filhas que serão protegidas */}
-          {/* O Outlet dentro de ProtectedRoute renderizará este elemento */}
+          {/* O Outlet renderizará estes elementos */}
           <Route path="/" element={<HomePage />} />
-          {/* Você pode adicionar outras rotas protegidas aqui dentro */}
+          {/* Adicione outras rotas protegidas aqui */}
           {/* Ex: <Route path="/profile" element={<ProfilePage />} /> */}
         </Route>
 
