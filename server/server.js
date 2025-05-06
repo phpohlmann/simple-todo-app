@@ -11,7 +11,7 @@ app.use(cors()); // Habilita CORS para todas as rotas
 app.use(express.json()); // Permite que o express leia JSON no corpo das requisições
 
 // Conectar ao Banco de Dados (Vamos implementar connectDB mais tarde)
-// connectDB();
+connectDB();
 
 // Rota de teste
 app.get('/', (req, res) => {
