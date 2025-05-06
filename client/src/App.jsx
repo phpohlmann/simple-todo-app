@@ -1,12 +1,35 @@
-import "./index.css"; // Importa o CSS principal (que agora tem o Tailwind)
+import "./index.css";
+import { Routes, Route } from "react-router-dom";
+
+// Páginas
+import LoginPage from "./pages/LoginPage.jsx"; // Verifique a extensão .jsx
+import RegisterPage from "./pages/RegisterPage.jsx"; // Verifique a extensão .jsx
+import HomePage from "./pages/HomePage.jsx"; // Verifique a extensão .jsx
+
+// Componente de Rota Protegida
+import ProtectedRoute from "./components/ProtectedRoute.jsx"; // Importa o ProtectedRoute
 
 function App() {
   return (
-    // Exemplo: um container simples com texto centralizado e padding do Tailwind
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold text-blue-600">
-        Simple To-Do Frontend
-      </h1>
+    <div className="App">
+      <Routes>
+        {/* Rotas Públicas */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+
+        {/* Rotas Privadas */}
+        {/* Usamos uma rota pai com o ProtectedRoute como 'element' */}
+        <Route element={<ProtectedRoute />}>
+          {/* Rotas filhas que serão protegidas */}
+          {/* O Outlet dentro de ProtectedRoute renderizará este elemento */}
+          <Route path="/" element={<HomePage />} />
+          {/* Você pode adicionar outras rotas protegidas aqui dentro */}
+          {/* Ex: <Route path="/profile" element={<ProfilePage />} /> */}
+        </Route>
+
+        {/* Rota 404 (Opcional) */}
+        {/* <Route path="*" element={<NotFoundPage />} /> */}
+      </Routes>
     </div>
   );
 }
