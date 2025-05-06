@@ -3,6 +3,7 @@ require('dotenv').config(); // Carrega as variáveis de ambiente do .env
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db'); // Vamos criar este arquivo depois
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 
@@ -12,6 +13,8 @@ app.use(express.json()); // Permite que o express leia JSON no corpo das requisi
 
 // Conectar ao Banco de Dados (Vamos implementar connectDB mais tarde)
 connectDB();
+
+app.use('/api/auth', userRoutes);
 
 // Rota de teste
 app.get('/', (req, res) => {
